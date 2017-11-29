@@ -4,7 +4,6 @@ package input
 
 import (
 	json "encoding/json"
-	cdp "github.com/knq/chromedp/cdp"
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"
 	jwriter "github.com/mailru/easyjson/jwriter"
@@ -37,16 +36,14 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput(in *jlexer.Lexer, out *T
 			continue
 		}
 		switch key {
-		case "state":
-			(out.State).UnmarshalEasyJSON(in)
 		case "x":
-			out.X = int64(in.Int64())
+			out.X = float64(in.Float64())
 		case "y":
-			out.Y = int64(in.Int64())
+			out.Y = float64(in.Float64())
 		case "radiusX":
-			out.RadiusX = int64(in.Int64())
+			out.RadiusX = float64(in.Float64())
 		case "radiusY":
-			out.RadiusY = int64(in.Int64())
+			out.RadiusY = float64(in.Float64())
 		case "rotationAngle":
 			out.RotationAngle = float64(in.Float64())
 		case "force":
@@ -67,62 +64,74 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput(out *jwriter.Writer, in 
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"state\":")
-	(in.State).MarshalEasyJSON(out)
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"x\":")
-	out.Int64(int64(in.X))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"y\":")
-	out.Int64(int64(in.Y))
-	if in.RadiusX != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"x\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"radiusX\":")
-		out.Int64(int64(in.RadiusX))
+		out.Float64(float64(in.X))
+	}
+	{
+		const prefix string = ",\"y\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.Y))
+	}
+	if in.RadiusX != 0 {
+		const prefix string = ",\"radiusX\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.RadiusX))
 	}
 	if in.RadiusY != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"radiusY\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"radiusY\":")
-		out.Int64(int64(in.RadiusY))
+		out.Float64(float64(in.RadiusY))
 	}
 	if in.RotationAngle != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"rotationAngle\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"rotationAngle\":")
 		out.Float64(float64(in.RotationAngle))
 	}
 	if in.Force != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"force\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"force\":")
 		out.Float64(float64(in.Force))
 	}
 	if in.ID != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"id\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"id\":")
 		out.Float64(float64(in.ID))
 	}
 	out.RawByte('}')
@@ -171,9 +180,9 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput1(in *jlexer.Lexer, out *
 		}
 		switch key {
 		case "x":
-			out.X = int64(in.Int64())
+			out.X = float64(in.Float64())
 		case "y":
-			out.Y = int64(in.Int64())
+			out.Y = float64(in.Float64())
 		case "duration":
 			out.Duration = int64(in.Int64())
 		case "tapCount":
@@ -194,40 +203,54 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput1(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"x\":")
-	out.Int64(int64(in.X))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"y\":")
-	out.Int64(int64(in.Y))
-	if in.Duration != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"x\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"duration\":")
+		out.Float64(float64(in.X))
+	}
+	{
+		const prefix string = ",\"y\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.Y))
+	}
+	if in.Duration != 0 {
+		const prefix string = ",\"duration\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
 		out.Int64(int64(in.Duration))
 	}
 	if in.TapCount != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"tapCount\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"tapCount\":")
 		out.Int64(int64(in.TapCount))
 	}
 	if in.GestureSourceType != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"gestureSourceType\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"gestureSourceType\":")
 		(in.GestureSourceType).MarshalEasyJSON(out)
 	}
 	out.RawByte('}')
@@ -276,17 +299,17 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput2(in *jlexer.Lexer, out *
 		}
 		switch key {
 		case "x":
-			out.X = int64(in.Int64())
+			out.X = float64(in.Float64())
 		case "y":
-			out.Y = int64(in.Int64())
+			out.Y = float64(in.Float64())
 		case "xDistance":
-			out.XDistance = int64(in.Int64())
+			out.XDistance = float64(in.Float64())
 		case "yDistance":
-			out.YDistance = int64(in.Int64())
+			out.YDistance = float64(in.Float64())
 		case "xOverscroll":
-			out.XOverscroll = int64(in.Int64())
+			out.XOverscroll = float64(in.Float64())
 		case "yOverscroll":
-			out.YOverscroll = int64(in.Int64())
+			out.YOverscroll = float64(in.Float64())
 		case "preventFling":
 			out.PreventFling = bool(in.Bool())
 		case "speed":
@@ -313,96 +336,124 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput2(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"x\":")
-	out.Int64(int64(in.X))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"y\":")
-	out.Int64(int64(in.Y))
-	if in.XDistance != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"x\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"xDistance\":")
-		out.Int64(int64(in.XDistance))
+		out.Float64(float64(in.X))
+	}
+	{
+		const prefix string = ",\"y\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.Y))
+	}
+	if in.XDistance != 0 {
+		const prefix string = ",\"xDistance\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.XDistance))
 	}
 	if in.YDistance != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"yDistance\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"yDistance\":")
-		out.Int64(int64(in.YDistance))
+		out.Float64(float64(in.YDistance))
 	}
 	if in.XOverscroll != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"xOverscroll\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"xOverscroll\":")
-		out.Int64(int64(in.XOverscroll))
+		out.Float64(float64(in.XOverscroll))
 	}
 	if in.YOverscroll != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"yOverscroll\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"yOverscroll\":")
-		out.Int64(int64(in.YOverscroll))
+		out.Float64(float64(in.YOverscroll))
 	}
 	if in.PreventFling {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"preventFling\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"preventFling\":")
 		out.Bool(bool(in.PreventFling))
 	}
 	if in.Speed != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"speed\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"speed\":")
 		out.Int64(int64(in.Speed))
 	}
 	if in.GestureSourceType != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"gestureSourceType\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"gestureSourceType\":")
 		(in.GestureSourceType).MarshalEasyJSON(out)
 	}
 	if in.RepeatCount != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"repeatCount\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"repeatCount\":")
 		out.Int64(int64(in.RepeatCount))
 	}
 	if in.RepeatDelayMs != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"repeatDelayMs\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"repeatDelayMs\":")
 		out.Int64(int64(in.RepeatDelayMs))
 	}
 	if in.InteractionMarkerName != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"interactionMarkerName\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"interactionMarkerName\":")
 		out.String(string(in.InteractionMarkerName))
 	}
 	out.RawByte('}')
@@ -451,9 +502,9 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput3(in *jlexer.Lexer, out *
 		}
 		switch key {
 		case "x":
-			out.X = int64(in.Int64())
+			out.X = float64(in.Float64())
 		case "y":
-			out.Y = int64(in.Int64())
+			out.Y = float64(in.Float64())
 		case "scaleFactor":
 			out.ScaleFactor = float64(in.Float64())
 		case "relativeSpeed":
@@ -474,38 +525,54 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput3(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"x\":")
-	out.Int64(int64(in.X))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"y\":")
-	out.Int64(int64(in.Y))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"scaleFactor\":")
-	out.Float64(float64(in.ScaleFactor))
-	if in.RelativeSpeed != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"x\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"relativeSpeed\":")
+		out.Float64(float64(in.X))
+	}
+	{
+		const prefix string = ",\"y\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.Y))
+	}
+	{
+		const prefix string = ",\"scaleFactor\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.ScaleFactor))
+	}
+	if in.RelativeSpeed != 0 {
+		const prefix string = ",\"relativeSpeed\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
 		out.Int64(int64(in.RelativeSpeed))
 	}
 	if in.GestureSourceType != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"gestureSourceType\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"gestureSourceType\":")
 		(in.GestureSourceType).MarshalEasyJSON(out)
 	}
 	out.RawByte('}')
@@ -569,12 +636,16 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput4(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
+	{
+		const prefix string = ",\"ignore\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Bool(bool(in.Ignore))
 	}
-	first = false
-	out.RawString("\"ignore\":")
-	out.Bool(bool(in.Ignore))
 	out.RawByte('}')
 }
 
@@ -632,7 +703,7 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput5(in *jlexer.Lexer, out *
 				out.Timestamp = nil
 			} else {
 				if out.Timestamp == nil {
-					out.Timestamp = new(cdp.Timestamp)
+					out.Timestamp = new(TimeSinceEpoch)
 				}
 				(*out.Timestamp).UnmarshalEasyJSON(in)
 			}
@@ -660,70 +731,98 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput5(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"type\":")
-	(in.Type).MarshalEasyJSON(out)
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"x\":")
-	out.Int64(int64(in.X))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"y\":")
-	out.Int64(int64(in.Y))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"timestamp\":")
-	if in.Timestamp == nil {
-		out.RawString("null")
-	} else {
-		(*in.Timestamp).MarshalEasyJSON(out)
-	}
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"button\":")
-	(in.Button).MarshalEasyJSON(out)
-	if in.DeltaX != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"type\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"deltaX\":")
+		(in.Type).MarshalEasyJSON(out)
+	}
+	{
+		const prefix string = ",\"x\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int64(int64(in.X))
+	}
+	{
+		const prefix string = ",\"y\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int64(int64(in.Y))
+	}
+	{
+		const prefix string = ",\"timestamp\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		if in.Timestamp == nil {
+			out.RawString("null")
+		} else {
+			(*in.Timestamp).MarshalEasyJSON(out)
+		}
+	}
+	{
+		const prefix string = ",\"button\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		(in.Button).MarshalEasyJSON(out)
+	}
+	if in.DeltaX != 0 {
+		const prefix string = ",\"deltaX\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
 		out.Float64(float64(in.DeltaX))
 	}
 	if in.DeltaY != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"deltaY\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"deltaY\":")
 		out.Float64(float64(in.DeltaY))
 	}
 	if in.Modifiers != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"modifiers\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"modifiers\":")
 		(in.Modifiers).MarshalEasyJSON(out)
 	}
 	if in.ClickCount != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"clickCount\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"clickCount\":")
 		out.Int64(int64(in.ClickCount))
 	}
 	out.RawByte('}')
@@ -812,7 +911,7 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput6(in *jlexer.Lexer, out *
 				out.Timestamp = nil
 			} else {
 				if out.Timestamp == nil {
-					out.Timestamp = new(cdp.Timestamp)
+					out.Timestamp = new(TimeSinceEpoch)
 				}
 				(*out.Timestamp).UnmarshalEasyJSON(in)
 			}
@@ -830,52 +929,60 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput6(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"type\":")
-	(in.Type).MarshalEasyJSON(out)
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"touchPoints\":")
-	if in.TouchPoints == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
-		out.RawString("null")
-	} else {
-		out.RawByte('[')
-		for v2, v3 := range in.TouchPoints {
-			if v2 > 0 {
-				out.RawByte(',')
-			}
-			if v3 == nil {
-				out.RawString("null")
-			} else {
-				(*v3).MarshalEasyJSON(out)
-			}
+	{
+		const prefix string = ",\"type\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		out.RawByte(']')
+		(in.Type).MarshalEasyJSON(out)
+	}
+	{
+		const prefix string = ",\"touchPoints\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		if in.TouchPoints == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v2, v3 := range in.TouchPoints {
+				if v2 > 0 {
+					out.RawByte(',')
+				}
+				if v3 == nil {
+					out.RawString("null")
+				} else {
+					(*v3).MarshalEasyJSON(out)
+				}
+			}
+			out.RawByte(']')
+		}
 	}
 	if in.Modifiers != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"modifiers\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"modifiers\":")
 		(in.Modifiers).MarshalEasyJSON(out)
 	}
 	if in.Timestamp != nil {
-		if !first {
-			out.RawByte(',')
-		}
-		first = false
-		out.RawString("\"timestamp\":")
-		if in.Timestamp == nil {
-			out.RawString("null")
+		const prefix string = ",\"timestamp\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
 		} else {
-			(*in.Timestamp).MarshalEasyJSON(out)
+			out.RawString(prefix)
 		}
+		(*in.Timestamp).MarshalEasyJSON(out)
 	}
 	out.RawByte('}')
 }
@@ -925,9 +1032,9 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput7(in *jlexer.Lexer, out *
 		case "type":
 			(out.Type).UnmarshalEasyJSON(in)
 		case "x":
-			out.X = int64(in.Int64())
+			out.X = float64(in.Float64())
 		case "y":
-			out.Y = int64(in.Int64())
+			out.Y = float64(in.Float64())
 		case "modifiers":
 			(out.Modifiers).UnmarshalEasyJSON(in)
 		case "timestamp":
@@ -936,7 +1043,7 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput7(in *jlexer.Lexer, out *
 				out.Timestamp = nil
 			} else {
 				if out.Timestamp == nil {
-					out.Timestamp = new(cdp.Timestamp)
+					out.Timestamp = new(TimeSinceEpoch)
 				}
 				(*out.Timestamp).UnmarshalEasyJSON(in)
 			}
@@ -944,6 +1051,10 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput7(in *jlexer.Lexer, out *
 			(out.Button).UnmarshalEasyJSON(in)
 		case "clickCount":
 			out.ClickCount = int64(in.Int64())
+		case "deltaX":
+			out.DeltaX = float64(in.Float64())
+		case "deltaY":
+			out.DeltaY = float64(in.Float64())
 		default:
 			in.SkipRecursive()
 		}
@@ -958,59 +1069,95 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput7(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"type\":")
-	(in.Type).MarshalEasyJSON(out)
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"x\":")
-	out.Int64(int64(in.X))
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"y\":")
-	out.Int64(int64(in.Y))
-	if in.Modifiers != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"type\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"modifiers\":")
+		(in.Type).MarshalEasyJSON(out)
+	}
+	{
+		const prefix string = ",\"x\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.X))
+	}
+	{
+		const prefix string = ",\"y\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.Y))
+	}
+	if in.Modifiers != 0 {
+		const prefix string = ",\"modifiers\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
 		(in.Modifiers).MarshalEasyJSON(out)
 	}
 	if in.Timestamp != nil {
-		if !first {
-			out.RawByte(',')
-		}
-		first = false
-		out.RawString("\"timestamp\":")
-		if in.Timestamp == nil {
-			out.RawString("null")
+		const prefix string = ",\"timestamp\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
 		} else {
-			(*in.Timestamp).MarshalEasyJSON(out)
+			out.RawString(prefix)
 		}
+		(*in.Timestamp).MarshalEasyJSON(out)
 	}
 	if in.Button != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"button\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"button\":")
 		(in.Button).MarshalEasyJSON(out)
 	}
 	if in.ClickCount != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"clickCount\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"clickCount\":")
 		out.Int64(int64(in.ClickCount))
+	}
+	if in.DeltaX != 0 {
+		const prefix string = ",\"deltaX\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.DeltaX))
+	}
+	if in.DeltaY != 0 {
+		const prefix string = ",\"deltaY\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Float64(float64(in.DeltaY))
 	}
 	out.RawByte('}')
 }
@@ -1067,7 +1214,7 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput8(in *jlexer.Lexer, out *
 				out.Timestamp = nil
 			} else {
 				if out.Timestamp == nil {
-					out.Timestamp = new(cdp.Timestamp)
+					out.Timestamp = new(TimeSinceEpoch)
 				}
 				(*out.Timestamp).UnmarshalEasyJSON(in)
 			}
@@ -1091,6 +1238,8 @@ func easyjsonC5a4559bDecodeGithubComKnqChromedpCdpInput8(in *jlexer.Lexer, out *
 			out.IsKeypad = bool(in.Bool())
 		case "isSystemKey":
 			out.IsSystemKey = bool(in.Bool())
+		case "location":
+			out.Location = int64(in.Int64())
 		default:
 			in.SkipRecursive()
 		}
@@ -1105,111 +1254,145 @@ func easyjsonC5a4559bEncodeGithubComKnqChromedpCdpInput8(out *jwriter.Writer, in
 	out.RawByte('{')
 	first := true
 	_ = first
-	if !first {
-		out.RawByte(',')
-	}
-	first = false
-	out.RawString("\"type\":")
-	(in.Type).MarshalEasyJSON(out)
-	if in.Modifiers != 0 {
-		if !first {
-			out.RawByte(',')
+	{
+		const prefix string = ",\"type\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"modifiers\":")
+		(in.Type).MarshalEasyJSON(out)
+	}
+	if in.Modifiers != 0 {
+		const prefix string = ",\"modifiers\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
 		(in.Modifiers).MarshalEasyJSON(out)
 	}
 	if in.Timestamp != nil {
-		if !first {
-			out.RawByte(',')
-		}
-		first = false
-		out.RawString("\"timestamp\":")
-		if in.Timestamp == nil {
-			out.RawString("null")
+		const prefix string = ",\"timestamp\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
 		} else {
-			(*in.Timestamp).MarshalEasyJSON(out)
+			out.RawString(prefix)
 		}
+		(*in.Timestamp).MarshalEasyJSON(out)
 	}
 	if in.Text != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"text\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"text\":")
 		out.String(string(in.Text))
 	}
 	if in.UnmodifiedText != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"unmodifiedText\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"unmodifiedText\":")
 		out.String(string(in.UnmodifiedText))
 	}
 	if in.KeyIdentifier != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"keyIdentifier\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"keyIdentifier\":")
 		out.String(string(in.KeyIdentifier))
 	}
 	if in.Code != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"code\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"code\":")
 		out.String(string(in.Code))
 	}
 	if in.Key != "" {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"key\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"key\":")
 		out.String(string(in.Key))
 	}
 	if in.WindowsVirtualKeyCode != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"windowsVirtualKeyCode\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"windowsVirtualKeyCode\":")
 		out.Int64(int64(in.WindowsVirtualKeyCode))
 	}
 	if in.NativeVirtualKeyCode != 0 {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"nativeVirtualKeyCode\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"nativeVirtualKeyCode\":")
 		out.Int64(int64(in.NativeVirtualKeyCode))
 	}
 	if in.AutoRepeat {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"autoRepeat\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"autoRepeat\":")
 		out.Bool(bool(in.AutoRepeat))
 	}
 	if in.IsKeypad {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"isKeypad\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"isKeypad\":")
 		out.Bool(bool(in.IsKeypad))
 	}
 	if in.IsSystemKey {
-		if !first {
-			out.RawByte(',')
+		const prefix string = ",\"isSystemKey\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
 		}
-		first = false
-		out.RawString("\"isSystemKey\":")
 		out.Bool(bool(in.IsSystemKey))
+	}
+	if in.Location != 0 {
+		const prefix string = ",\"location\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.Int64(int64(in.Location))
 	}
 	out.RawByte('}')
 }

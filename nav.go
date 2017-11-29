@@ -11,7 +11,7 @@ import (
 // Navigate navigates the current frame.
 func Navigate(urlstr string) Action {
 	return ActionFunc(func(ctxt context.Context, h cdp.Handler) error {
-		frameID, err := page.Navigate(urlstr).Do(ctxt, h)
+		frameID, _, _, err := page.Navigate(urlstr).Do(ctxt, h)
 		if err != nil {
 			return err
 		}
@@ -96,7 +96,7 @@ func CaptureScreenshot(res *[]byte) Action {
 }
 
 // AddOnLoadScript adds a script to evaluate on page load.
-func AddOnLoadScript(source string, id *page.ScriptIdentifier) Action {
+/*func AddOnLoadScript(source string, id *page.ScriptIdentifier) Action {
 	if id == nil {
 		panic("id cannot be nil")
 	}
@@ -111,7 +111,7 @@ func AddOnLoadScript(source string, id *page.ScriptIdentifier) Action {
 // RemoveOnLoadScript removes a script to evaluate on page load.
 func RemoveOnLoadScript(id page.ScriptIdentifier) Action {
 	return page.RemoveScriptToEvaluateOnLoad(id)
-}
+}*/
 
 // Location retrieves the document location.
 func Location(urlstr *string) Action {

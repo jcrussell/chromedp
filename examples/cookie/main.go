@@ -71,9 +71,9 @@ func main() {
 func setcookies(host string, res *string) cdp.Tasks {
 	return cdp.Tasks{
 		cdp.ActionFunc(func(ctxt context.Context, h cdptypes.Handler) error {
-			expr := cdptypes.Timestamp(time.Now().Add(180 * 24 * time.Hour))
-			success, err := network.SetCookie(host, "cookiename", "cookievalue").
-				WithExpirationDate(&expr).
+			expr := cdptypes.TimeSinceEpoch(time.Now().Add(180 * 24 * time.Hour))
+			success, err := network.SetCookie("cookiename", "cookievalue").
+				WithExpires(&expr).
 				WithDomain("localhost").
 				WithHTTPOnly(true).
 				Do(ctxt, h)

@@ -13,7 +13,7 @@ import (
 
 // MouseAction is a mouse action.
 func MouseAction(typ input.MouseType, x, y int64, opts ...MouseOption) Action {
-	me := input.DispatchMouseEvent(typ, x, y)
+	me := input.DispatchMouseEvent(typ, float64(x), float64(y))
 
 	// apply opts
 	for _, o := range opts {
@@ -29,8 +29,8 @@ func MouseClickXY(x, y int64, opts ...MouseOption) Action {
 	return ActionFunc(func(ctxt context.Context, h cdp.Handler) error {
 		me := &input.DispatchMouseEventParams{
 			Type:       input.MousePressed,
-			X:          x,
-			Y:          y,
+			X:          float64(x),
+			Y:          float64(y),
 			Button:     input.ButtonLeft,
 			ClickCount: 1,
 		}
@@ -65,7 +65,7 @@ func MouseClickNode(n *cdp.Node, opts ...MouseOption) Action {
 			return err
 		}
 
-		box, err := dom.GetBoxModel(n.NodeID).Do(ctxt, h)
+		box, err := dom.GetBoxModel().WithNodeID(n.NodeID).Do(ctxt, h)
 		if err != nil {
 			return err
 		}
@@ -174,7 +174,7 @@ func KeyAction(keys string, opts ...KeyOption) Action {
 // KeyActionNode dispatches a key event on a node.
 func KeyActionNode(n *cdp.Node, keys string, opts ...KeyOption) Action {
 	return ActionFunc(func(ctxt context.Context, h cdp.Handler) error {
-		err := dom.Focus(n.NodeID).Do(ctxt, h)
+		err := dom.Focus().WithNodeID(n.NodeID).Do(ctxt, h)
 		if err != nil {
 			return err
 		}

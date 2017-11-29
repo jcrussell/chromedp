@@ -83,7 +83,13 @@ func (s *Selector) run(ctxt context.Context, h cdp.Handler) chan error {
 		for {
 			root, err := h.GetRoot(ctxt)
 			if err != nil {
-				continue
+				select {
+				case <-ctxt.Done():
+					ch <- ctxt.Err()
+					return
+				default:
+					continue
+				}
 			}
 
 			select {
@@ -293,7 +299,7 @@ func NodeVisible(s *Selector) {
 		var err error
 
 		// check box model
-		_, err = dom.GetBoxModel(n.NodeID).Do(ctxt, h)
+		_, err = dom.GetBoxModel().WithNodeID(n.NodeID).Do(ctxt, h)
 		if err != nil {
 			if isCouldNotComputeBoxModelError(err) {
 				return ErrNotVisible
@@ -321,7 +327,7 @@ func NodeNotVisible(s *Selector) {
 		var err error
 
 		// check box model
-		_, err = dom.GetBoxModel(n.NodeID).Do(ctxt, h)
+		_, err = dom.GetBoxModel().WithNodeID(n.NodeID).Do(ctxt, h)
 		if err != nil {
 			if isCouldNotComputeBoxModelError(err) {
 				return nil
