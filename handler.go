@@ -44,8 +44,6 @@ type TargetHandler struct {
 	// detached is closed when the detached event is received.
 	detached chan *inspector.EventDetached
 
-	pageWaitGroup, domWaitGroup *sync.WaitGroup
-
 	// last is the last sent message identifier.
 	last  int64
 	lastm sync.Mutex
@@ -98,8 +96,6 @@ func (h *TargetHandler) Run(ctxt context.Context) error {
 	h.qevents = make(chan *cdp.Message, 1024)
 	h.res = make(map[int64]chan *cdp.Message)
 	h.detached = make(chan *inspector.EventDetached)
-	h.pageWaitGroup = new(sync.WaitGroup)
-	h.domWaitGroup = new(sync.WaitGroup)
 	h.Unlock()
 
 	// run
@@ -145,14 +141,18 @@ func (h *TargetHandler) Run(ctxt context.Context) error {
 
 // run handles the actual message processing to / from the web socket connection.
 func (h *TargetHandler) run(ctxt context.Context) {
-	defer h.conn.Close()
-
 	// add cancel to context
 	ctxt, cancel := context.WithCancel(ctxt)
 	defer cancel()
 
 	go func() {
 		defer cancel()
+		defer h.conn.Close()
+		defer close(h.qres)
+		defer close(h.qevents)
+		// TODO: may not want to close this here... could cause panic if
+		// Execute tries to send.
+		defer close(h.qcmd)
 
 		for {
 			select {
@@ -188,58 +188,30 @@ func (h *TargetHandler) run(ctxt context.Context) {
 		}
 	}()
 
-	var wg sync.WaitGroup
-	defer wg.Wait()
-
-	// process queues
-	wg.Add(1)
+	// process event queue
 	go func() {
-		defer wg.Done()
-		for {
-			select {
-			case ev := <-h.qevents:
-				err := h.processEvent(ctxt, ev)
-				if err != nil {
-					h.errorf("could not process event %s: %v", ev.Method, err)
-				}
-			case <-ctxt.Done():
-				return
+		for ev := range h.qevents {
+			if err := h.processEvent(ctxt, ev); err != nil {
+				h.errorf("could not process event %s: %v", ev.Method, err)
 			}
 		}
 	}()
 
-	wg.Add(1)
+	// process result queue
 	go func() {
-		defer wg.Done()
-		for {
-			select {
-			case res := <-h.qres:
-				err := h.processResult(res)
-				if err != nil {
-					h.errorf("could not process result for message %d: %v", res.ID, err)
-				}
-			case <-ctxt.Done():
-				return
+		for res := range h.qres {
+			if err := h.processResult(res); err != nil {
+				h.errorf("could not process result for message %d: %v", res.ID, err)
 			}
 		}
 	}()
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for {
-			select {
-			case cmd := <-h.qcmd:
-				err := h.processCommand(cmd)
-				if err != nil {
-					h.errorf("could not process command message %d: %v", cmd.ID, err)
-				}
-
-			case <-ctxt.Done():
-				return
-			}
+	// process command queue
+	for cmd := range h.qcmd {
+		if err := h.processCommand(cmd); err != nil {
+			h.errorf("could not process command message %d: %v", cmd.ID, err)
 		}
-	}()
+	}
 }
 
 // read reads a message from the client connection.
@@ -282,23 +254,15 @@ func (h *TargetHandler) processEvent(ctxt context.Context, msg *cdp.Message) err
 		return nil
 
 	case *dom.EventDocumentUpdated:
-		h.domWaitGroup.Wait()
 		h.documentUpdated(ctxt)
 		return nil
 	}
 
-	d := msg.Method.Domain()
-	if d != "Page" && d != "DOM" {
-		return nil
-	}
-
-	switch d {
+	switch msg.Method.Domain() {
 	case "Page":
-		h.pageWaitGroup.Add(1)
 		h.pageEvent(ctxt, ev)
 
 	case "DOM":
-		h.domWaitGroup.Add(1)
 		h.domEvent(ctxt, ev)
 	}
 
@@ -553,8 +517,6 @@ loop:
 
 // pageEvent handles incoming page events.
 func (h *TargetHandler) pageEvent(ctxt context.Context, ev interface{}) {
-	defer h.pageWaitGroup.Done()
-
 	var id cdp.FrameID
 	var op frameOp
 
@@ -623,8 +585,6 @@ func (h *TargetHandler) pageEvent(ctxt context.Context, ev interface{}) {
 
 // domEvent handles incoming DOM events.
 func (h *TargetHandler) domEvent(ctxt context.Context, ev interface{}) {
-	defer h.domWaitGroup.Done()
-
 	// wait current frame
 	f, err := h.WaitFrame(ctxt, cdp.EmptyFrameID)
 	if err != nil {
