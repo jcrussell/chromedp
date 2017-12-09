@@ -138,6 +138,30 @@ func (c *CDP) AddTarget(ctxt context.Context, t client.Target) {
 	}
 }
 
+func (c *CDP) closeTarget(ctxt context.Context, t string, opts ...client.Option) error {
+	c.Lock()
+	defer c.Unlock()
+	cl := c.r.Client(opts...)
+
+	if _, ok := c.handlerMap[t]; !ok {
+		return errors.New("unknown target")
+	}
+
+	target := client.Chrome{
+		ID: t,
+	}
+
+	if err := cl.CloseTarget(ctxt, &target); err != nil {
+		return err
+	}
+
+	// can't remove from handlers otherwise we'll screw up our indices
+	c.handlers[c.handlerMap[t]] = nil
+	delete(c.handlerMap, t)
+
+	return nil
+}
+
 // Wait waits for the Chrome runner to terminate.
 func (c *CDP) Wait() error {
 	c.RLock()
@@ -337,9 +361,9 @@ func (c *CDP) CloseByIndex(i int) Action {
 }
 
 // CloseByID closes the Chrome target with the specified id.
-func (c *CDP) CloseByID(id string) Action {
+func (c *CDP) CloseByID(id string, opts ...client.Option) Action {
 	return ActionFunc(func(ctxt context.Context, h cdp.Handler) error {
-		return nil
+		return c.closeTarget(ctxt, id, opts...)
 	})
 }
 
